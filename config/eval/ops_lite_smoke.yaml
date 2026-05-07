@@ -1,0 +1,33 @@
+exp_id: "pave_ops_lite_smoke"
+agent_type: "langgraph_rca"
+model_name: ""
+
+data:
+  dataset: "RCABench"
+  type: single
+  question_field: question
+  gt_field: answer
+  tags:
+    - ops-lite
+
+db_url: "sqlite:///eval.db"
+
+concurrency: 15
+judge_concurrency: 2
+max_samples: null
+
+# v3 cases live at <root>/cases/<name>/ either as real dirs (HF snapshot)
+# or as symlinks (local pool layout). The v3 seeder writes per-row
+# meta.source_data_dir, so no global source_path is needed here — the
+# RCABenchProcesser reads each case dir directly off that meta field.
+
+judge_model:
+  model_provider:
+    type: chat.completions
+    model: ${UTU_LLM_MODEL}
+    base_url: ${UTU_LLM_BASE_URL}
+    api_key: ${UTU_LLM_API_KEY}
+  rate_limit:
+    rpm: 500
+    tpm: 320000
+    max_retries: 20
